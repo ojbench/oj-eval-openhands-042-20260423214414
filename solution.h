@@ -115,14 +115,10 @@ public:
     void put(std::string str, T value) {
 	    int code = GetHashCode(str);
 	    
+	    Node* cur = head;
+	    
 	    if (fast_search_list_size > 0) {
-	    	Node* cur = head;
-	    	for (int i = 0; i < list_size; i++) {
-	    		if (code <= cur->bound) {
-	    			cur->kv_map[str] = value;
-	    			return;
-	    		}
-	    		
+	    	while (code > cur->bound) {
 	    		bool moved = false;
 	    		for (int k = fast_search_list_size - 1; k >= 0; k--) {
 	    			Node* next = cur->fast_search_list[k];
@@ -138,31 +134,21 @@ public:
 	    		}
 	    	}
 	    } else {
-	    	Node* cur = head;
-	    	for (int i = 0; i < list_size; i++) {
-	    		if (code <= cur->bound) {
-	    			cur->kv_map[str] = value;
-	    			return;
-	    		}
+	    	while (code > cur->bound) {
 	    		cur = cur->next;
 	    	}
 	    }
+	    
+	    cur->kv_map[str] = value;
     }
 
 	T get(std::string str) {
     	int code = GetHashCode(str);
     	
+    	Node* cur = head;
+    	
     	if (fast_search_list_size > 0) {
-    		Node* cur = head;
-    		for (int i = 0; i < list_size; i++) {
-    			if (code <= cur->bound) {
-    				auto it = cur->kv_map.find(str);
-    				if (it != cur->kv_map.end()) {
-    					return it->second;
-    				}
-    				return T();
-    			}
-    			
+    		while (code > cur->bound) {
     			bool moved = false;
     			for (int k = fast_search_list_size - 1; k >= 0; k--) {
     				Node* next = cur->fast_search_list[k];
@@ -178,19 +164,15 @@ public:
     			}
     		}
     	} else {
-    		Node* cur = head;
-    		for (int i = 0; i < list_size; i++) {
-    			if (code <= cur->bound) {
-    				auto it = cur->kv_map.find(str);
-    				if (it != cur->kv_map.end()) {
-    					return it->second;
-    				}
-    				return T();
-    			}
+    		while (code > cur->bound) {
     			cur = cur->next;
     		}
     	}
     	
+    	auto it = cur->kv_map.find(str);
+    	if (it != cur->kv_map.end()) {
+    		return it->second;
+    	}
     	return T();
     }
 
