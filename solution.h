@@ -122,7 +122,7 @@ public:
 	    		bool jumped = false;
 	    		for (int k = fast_search_list_size - 1; k >= 0; k--) {
 	    			Node* next = cur->fast_search_list[k];
-	    			if (next->bound > cur->bound && next->bound < code) {
+	    			if (next->bound > cur->bound && code > next->bound) {
 	    				cur = next;
 	    				jumped = true;
 	    				break;
@@ -149,7 +149,7 @@ public:
     			bool jumped = false;
     			for (int k = fast_search_list_size - 1; k >= 0; k--) {
     				Node* next = cur->fast_search_list[k];
-    				if (next->bound > cur->bound && next->bound < code) {
+    				if (next->bound > cur->bound && code > next->bound) {
     					cur = next;
     					jumped = true;
     					break;
