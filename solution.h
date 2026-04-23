@@ -119,18 +119,22 @@ public:
 	    
 	    if (fast_search_list_size > 0) {
 	    	while (code > cur->bound) {
-	    		bool moved = false;
+	    		Node* best = nullptr;
 	    		for (int k = fast_search_list_size - 1; k >= 0; k--) {
 	    			Node* next = cur->fast_search_list[k];
 	    			if (next->bound > cur->bound && next->bound < code) {
-	    				cur = next;
-	    				moved = true;
+	    				best = next;
 	    				break;
 	    			}
 	    		}
 	    		
-	    		if (!moved) {
+	    		if (best != nullptr) {
+	    			cur = best;
+	    		} else {
 	    			cur = cur->next;
+	    			if (cur->bound <= head->bound && cur != head) {
+	    				break;
+	    			}
 	    		}
 	    	}
 	    } else {
@@ -149,18 +153,22 @@ public:
     	
     	if (fast_search_list_size > 0) {
     		while (code > cur->bound) {
-    			bool moved = false;
+    			Node* best = nullptr;
     			for (int k = fast_search_list_size - 1; k >= 0; k--) {
     				Node* next = cur->fast_search_list[k];
     				if (next->bound > cur->bound && next->bound < code) {
-    					cur = next;
-    					moved = true;
+    					best = next;
     					break;
     				}
     			}
     			
-    			if (!moved) {
+    			if (best != nullptr) {
+    				cur = best;
+    			} else {
     				cur = cur->next;
+    				if (cur->bound <= head->bound && cur != head) {
+    					break;
+    				}
     			}
     		}
     	} else {
